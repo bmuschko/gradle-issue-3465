@@ -1,0 +1,31 @@
+configure(allJavaProjects()) {
+    apply plugin: 'java'
+    
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+
+    repositories {
+        jcenter()
+    }
+}
+
+def allJavaProjects() {
+    subprojects.findAll { it.name.startsWith('project') }
+}
+
+task createSubprojects {
+    doLast {
+        (1..200).each {
+            def projectName = "project${it}"
+            def javaFile = file("${projectName}/src/main/java/MyClass${it}.java")
+            javaFile.parentFile.mkdirs()
+            javaFile.createNewFile()
+            file("${projectName}/src/main/java/MyClass${it}.java").text = """
+                public class MyClass${it} {
+                    public void doNothing() {}
+                }
+            """
+        }
+        file('settings.gradle').text = "include ${(1..200).collect { "'project${it}'" }.join(', ')}, 'dist'"
+    }
+}

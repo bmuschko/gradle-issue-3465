@@ -1,0 +1,23 @@
+apply plugin: 'base'
+
+def targetDir = new File(rootProject.projectDir, 'build/dist')
+
+task copySourceFilesProject1(type: Copy) {
+    from new File(project(':project1').projectDir, 'src/main/java')
+    into targetDir
+}
+
+task copySourceFilesProject22(type: Copy) {
+    from new File(project(':project22').projectDir, 'src/main/java')
+    into targetDir
+}
+
+task copySourceFilesProject66(type: Copy) {
+    from new File(project(':project66').projectDir, 'src/main/java')
+    into targetDir
+}
+
+
+build {
+    dependsOn copySourceFilesProject1, copySourceFilesProject22, copySourceFilesProject66
+}
